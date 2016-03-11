@@ -6,6 +6,7 @@ var SelectPaises = React.createClass({
         });
         return(
             <select name="id_pais" ref="id_pais" className="form-control" value={this.props.valor} onChange={this.props.handler!=null?this.props.handler:null}>
+                {this.props.vacio!=null && this.props.vacio ? <option value="0">Todos</option> : null}
                 {opciones}
             </select>
         );
@@ -98,6 +99,9 @@ var ItemAutor = React.createClass({
 var ListaAutores = React.createClass({
     render:function(){
         var autores = this.props.autores.map(function(autor,index){
+            if(this.props.filtro>0 && this.props.filtro!=autor.id_pais){
+                return;
+            }
             return(<ItemAutor autor={autor} index={index} key={autor.id_autor} actualizar={this.props.actualizar}/>);
         }.bind(this));
         return(
@@ -165,30 +169,39 @@ var CajaAutores = React.createClass({
         });
     },
     getInitialState(){
-        return {autores:[]};
+        return {autores:[],filtro:0};
     },
     componentDidMount(){
         this.cargarDesdeServidor();
         setInterval(this.cargarDesdeServidor, 15000);
     },
+    filtro(e){
+        this.setState({filtro:e.target.value});
+    },
     render: function () {
         return(
-            <table className="table table-bordered table-hover table-condensed" key="tabla-autores">
-                <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>Nombre</th>
-                        <th>Correo</th>
-                        <th>País</th>
-                        <th>Posts</th>
-                        <th>Acciones</th>
-                    </tr>
-                </thead>
-                <ListaAutores autores={this.state.autores} actualizar={this.cargarDesdeServidor}/>
-                <tfoot>
-                    <AgregarNuevoAutor actualizar={this.cargarDesdeServidor}/>
-                </tfoot>
-            </table>
+            <div>
+                <div className="form-group">
+                    <label for="filtro">Filtrar por país</label>
+                    <SelectPaises valor={this.state.filtro} handler={this.filtro} vacio={true}/>
+                </div>
+                <table className="table table-bordered table-hover table-condensed" key="tabla-autores">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Nombre</th>
+                            <th>Correo</th>
+                            <th>País</th>
+                            <th>Posts</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <ListaAutores autores={this.state.autores} filtro={this.state.filtro} actualizar={this.cargarDesdeServidor}/>
+                    <tfoot>
+                        <AgregarNuevoAutor actualizar={this.cargarDesdeServidor}/>
+                    </tfoot>
+                </table>
+            </div>
         );
     }
 });
