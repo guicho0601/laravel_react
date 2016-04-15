@@ -18,6 +18,6 @@ class ComentariosController extends Controller
         $comentario->fh_publicacion = Carbon::now();
         $comentario->autor = 1;
         $comentario->save();
-        return response($comentario->id_comentario);
+        return response(PostController::listado_post());
     }
 }

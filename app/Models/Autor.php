@@ -23,6 +23,8 @@ class Autor extends Model
 
     protected $fillable = ['nickname','correo','id_pais'];
 
+    protected $hidden = ['fh_publicacion','posts'];
+
     public function posts(){
         return $this->hasMany('App\Models\Post','autor','id_autor');
     }
