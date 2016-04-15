@@ -23055,14 +23055,9 @@ module.exports = require('./lib/React');
 
 var React = require('react');
 var ReactDOM = require('react-dom');
-var moment = require('moment');
 
-var commentStyle = {
-    paddingLeft: '30px'
-};
-
-var CommentForm = React.createClass({
-    displayName: 'CommentForm',
+module.exports = React.createClass({
+    displayName: 'exports',
 
     getInitialState: function getInitialState() {
         return { comment: '' };
@@ -23125,8 +23120,18 @@ var CommentForm = React.createClass({
     }
 });
 
-var CommentsList = React.createClass({
-    displayName: 'CommentsList',
+},{"react":166,"react-dom":30}],168:[function(require,module,exports){
+'use strict';
+
+var React = require('react');
+var ReactDOM = require('react-dom');
+
+var commentStyle = {
+    paddingLeft: '30px'
+};
+
+module.exports = React.createClass({
+    displayName: 'exports',
 
     render: function render() {
         var commentNode = this.props.data.map(function (comment) {
@@ -23152,6 +23157,16 @@ var CommentsList = React.createClass({
         );
     }
 });
+
+},{"react":166,"react-dom":30}],169:[function(require,module,exports){
+'use strict';
+
+var React = require('react');
+var ReactDOM = require('react-dom');
+var moment = require('moment');
+
+var CommentForm = require('./CommentForm.jsx');
+var CommentsList = require('./CommentsList.jsx');
 
 var PostList = React.createClass({
     displayName: 'PostList',
@@ -23237,6 +23252,6 @@ var PostBox = React.createClass({
 
 ReactDOM.render(React.createElement(PostBox, { url: global_url + "/post", pollInterval: 10000 }), document.getElementById('lista_posts'));
 
-},{"moment":27,"react":166,"react-dom":30}]},{},[167]);
+},{"./CommentForm.jsx":167,"./CommentsList.jsx":168,"moment":27,"react":166,"react-dom":30}]},{},[169]);
 
 //# sourceMappingURL=post.js.map
