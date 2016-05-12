@@ -1,9 +1,10 @@
-var React = require('react');
-var ReactDOM = require('react-dom');
-var moment = require('moment');
+import React from 'react';
+import ReactDOM from 'react-dom';
+import moment from 'moment';
+import NProgress from 'nprogress';
 
-var CommentForm = require('./CommentForm.jsx');
-var CommentsList = require('./CommentsList.jsx');
+import CommentForm from './CommentForm.jsx';
+import CommentsList from './CommentsList.jsx';
 
 var PostList = React.createClass({
     render: function() {
@@ -39,15 +40,21 @@ var PostBox = React.createClass({
                 type: 'GET',
                 dataType: 'json',
                 cache: false,
+                beforeSend: function(){
+                    NProgress.start();
+                },
                 success: function(data) {
                     this.setState({data: data});
                 }.bind(this),
                 error: function(xhr, status, err) {
                     console.error(this.props.url, status, err.toString());
-                }.bind(this)
+                }.bind(this),
+                complete: function(){
+                    NProgress.done();
+                }
             });
         }else{
-            this.setState({data:data});
+            this.setState({data:JSON.parse(data)});
         }
     },
     getInitialState: function() {
@@ -55,7 +62,8 @@ var PostBox = React.createClass({
     },
     componentDidMount: function() {
         this.loadCommentsFromServer();
-        setInterval(this.loadCommentsFromServer, this.props.pollInterval);
+        var socket = io.connect('http://localhost:8890');
+        socket.on('post', this.loadCommentsFromServer);
     },
     render: function() {
         return (

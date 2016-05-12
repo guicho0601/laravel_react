@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
+use Redis;
 
 class ComentariosController extends Controller
 {
@@ -18,6 +19,8 @@ class ComentariosController extends Controller
         $comentario->fh_publicacion = Carbon::now();
         $comentario->autor = 1;
         $comentario->save();
+        $redis = Redis::connection();
+        $redis->publish('post', PostController::listado_post()->toJson());
         return response(PostController::listado_post());
     }
 }

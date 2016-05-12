@@ -15,9 +15,8 @@ module.exports = React.createClass({
                     comentario: this.state.comment,
                     _token: csrf_token
                 },
-                success: function (data) {
+                success: function () {
                     this.setState({comment: ""});
-                    this.props.actualizar(data);
                 }.bind(this),
                 complete: function () {
                     $(this.state.boton).html('Comentar');
